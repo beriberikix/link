@@ -88,6 +88,19 @@ module.exports = function(app, passport) {
 				failureRedirect : '/'
 			}));
 
+	// github ---------------------------------
+
+		// send to github to do the authentication
+		app.get('/auth/github', passport.authenticate('github', { scope : ['profile', 'email'] }));
+
+		// the callback after github has authenticated the user
+		app.get('/auth/github/callback',
+			passport.authenticate('github', {
+				successRedirect : '/profile',
+				failureRedirect : '/'
+			}));
+
+
 // =============================================================================
 // AUTHORIZE (ALREADY LOGGED IN / CONNECTING OTHER SOCIAL ACCOUNT) =============
 // =============================================================================
@@ -139,6 +152,18 @@ module.exports = function(app, passport) {
 				failureRedirect : '/'
 			}));
 
+	// github ---------------------------------
+
+		// send to github to do the authentication
+		app.get('/connect/github', passport.authorize('github', { scope : ['profile', 'email'] }));
+
+		// the callback after github has authorized the user
+		app.get('/connect/github/callback',
+			passport.authorize('github', {
+				successRedirect : '/profile',
+				failureRedirect : '/'
+			}));
+
 // =============================================================================
 // UNLINK ACCOUNTS =============================================================
 // =============================================================================
@@ -183,6 +208,14 @@ module.exports = function(app, passport) {
 		});
 	});
 
+	// github ---------------------------------
+	app.get('/unlink/github', isLoggedIn, function(req, res) {
+		var user          = req.user;
+		user.github.token = undefined;
+		user.save(function(err) {
+			res.redirect('/profile');
+		});
+	});
 
 };
 
