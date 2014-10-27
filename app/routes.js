@@ -91,7 +91,7 @@ module.exports = function(app, passport) {
 	// github ---------------------------------
 
 		// send to github to do the authentication
-		app.get('/auth/github', passport.authenticate('github', { scope : ['profile', 'email'] }));
+		app.get('/auth/github', passport.authenticate('github', { scope : ['user'] }));
 
 		// the callback after github has authenticated the user
 		app.get('/auth/github/callback',
@@ -155,7 +155,7 @@ module.exports = function(app, passport) {
 	// github ---------------------------------
 
 		// send to github to do the authentication
-		app.get('/connect/github', passport.authorize('github', { scope : ['profile', 'email'] }));
+		app.get('/connect/github', passport.authorize('github', { scope : ['user'] }));
 
 		// the callback after github has authorized the user
 		app.get('/connect/github/callback',

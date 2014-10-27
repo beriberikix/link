@@ -389,6 +389,8 @@ module.exports = function(passport) {
     },
     function(req, token, refreshToken, profile, done) {
 
+        console.log(profile);
+
         // asynchronous
         process.nextTick(function() {
 
@@ -405,7 +407,8 @@ module.exports = function(passport) {
                         if (!user.github.token) {
                             user.github.token = token;
                             user.github.name  = profile.displayName;
-                            user.github.email = (profile.emails[0].value || '').toLowerCase(); // pull the first email
+                            user.github.email = profile.email; // public github email; need to hit /email if unlisted
+                            user.github.username = profile.username;
 
                             user.save(function(err) {
                                 if (err)
@@ -422,7 +425,8 @@ module.exports = function(passport) {
                         newUser.github.id    = profile.id;
                         newUser.github.token = token;
                         newUser.github.name  = profile.displayName;
-                        newUser.github.email = (profile.emails[0].value || '').toLowerCase(); // pull the first email
+                        newUser.github.email = profile.email; // public github email; need to hit /email if unlisted
+                        newUser.github.username = profile.username;
 
                         newUser.save(function(err) {
                             if (err)
@@ -440,7 +444,8 @@ module.exports = function(passport) {
                 user.github.id    = profile.id;
                 user.github.token = token;
                 user.github.name  = profile.displayName;
-                user.github.email = (profile.emails[0].value || '').toLowerCase(); // pull the first email
+                user.github.email = profile.email; // public github email; need to hit /email if unlisted
+                user.github.username = profile.username;
 
                 user.save(function(err) {
                     if (err)
